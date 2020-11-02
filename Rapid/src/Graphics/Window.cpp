@@ -19,26 +19,26 @@ namespace Rapid
 
 		Window::~Window()
 		{
+			glfwDestroyWindow(mainWindow);
 			glfwTerminate();
 		}
 
 		bool Window::Init()
 		{
-			// Setup GLFW window properties - Pencere ozelliklerini hazirla
-			// OpenGL version - OpenGL versiyonu
-			//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-			//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-			// Core Profile - Geri donus uyumlu degil
-			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-			// Allow forward compatibility - Ileri uyumlu
-			glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-			
 			// Initialize GLFW - GLFW'i hazirla
 			if (!glfwInit())
 			{
 				std::cout << "GLFW initialisation failed! - GLFW hazirlanamadi!" << std::endl;
 				return false;
 			}
+			// Setup GLFW window properties - Pencere ozelliklerini hazirla
+			// OpenGL version - OpenGL versiyonu
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+			// Core Profile - Geri donus uyumlu degil
+			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+			// Allow forward compatibility - Ileri uyumlu
+			glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 			
 			// Create Window - Pencere olustur
 			mainWindow = glfwCreateWindow(m_WINDOW_WIDTH, m_WINDOW_HEIGHT, m_windowTitle, NULL, NULL);
@@ -47,6 +47,8 @@ namespace Rapid
 				std::cout << "GLFW window creation failed! - GLFW pencere olusturulamadi!" << std::endl;
 				return false;
 			}
+
+			glfwGetFramebufferSize(mainWindow, &m_bufferWidth, &m_bufferHeight);
 
 			// Set context for GLEW - GLEW baglami
 			glfwMakeContextCurrent(mainWindow);
@@ -62,6 +64,8 @@ namespace Rapid
 				glfwTerminate();
 				return false;
 			}
+			glEnable(GL_DEPTH_TEST);
+			glViewport(0, 0, m_bufferWidth, m_bufferHeight);
 			glfwSetWindowSizeCallback(mainWindow, framebuffer_size_callback);
 			return true;
 		}
