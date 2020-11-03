@@ -15,6 +15,12 @@ namespace Rapid
 			{
 				glfwTerminate();
 			}
+			for(size_t i = 0; i < 1024;  i++)
+			{
+				keys[i] = false;
+			}
+			xChange = 0.0f;
+			yChange = 0.0f;
 		}
 
 		Window::~Window()
@@ -53,6 +59,10 @@ namespace Rapid
 			// Set context for GLEW - GLEW baglami
 			glfwMakeContextCurrent(mainWindow);
 
+			// Handle key + mouse input - Tus ve mouse girislerini kontrol et
+			CreateCallBacks();
+			glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			
 			// Allow modern extension features - modern opengl icin gerekli fonksiyonlari glew ile izinlendir
 			glewExperimental = GL_TRUE;
 
@@ -66,6 +76,7 @@ namespace Rapid
 			}
 			glEnable(GL_DEPTH_TEST);
 			glViewport(0, 0, m_bufferWidth, m_bufferHeight);
+			glfwSetWindowUserPointer(mainWindow, this);
 			glfwSetWindowSizeCallback(mainWindow, framebuffer_size_callback);
 			return true;
 		}
@@ -95,5 +106,61 @@ namespace Rapid
 			// Setup wievport size - goruntu alanini hazirla
 			glViewport(0, 0, width, height);
 		}
+
+		void Window::CreateCallBacks()
+		{
+			glfwSetKeyCallback(mainWindow, HandleKeys);
+			glfwSetCursorPosCallback(mainWindow, HandleMouse);
+		}
+
+		GLfloat Window::GetXChange()
+		{
+			GLfloat theChange = xChange;
+			xChange = 0.0f;
+			return theChange;
+		}
+
+		GLfloat Window::GetYChange()
+		{
+			GLfloat theChange = yChange;
+			yChange = 0.0f;
+			return theChange;
+		}
+		
+		void Window::HandleKeys(GLFWwindow* window, int key, int code, int action, int mode)
+		{
+			Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+			if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+			{
+				glfwSetWindowShouldClose(window, GL_TRUE);
+			}
+			if(key >= 0 && key < 1024)
+			{
+				if(action == GLFW_PRESS)
+				{
+					theWindow->keys[key] = true;
+				}
+				else if(action == GLFW_RELEASE)
+				{
+					theWindow->keys[key] = false;
+				}
+			}
+		}
+
+		void Window::HandleMouse(GLFWwindow* window, double xPos, double yPos)
+		{
+			Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+			if(theWindow->mousedFirstMoved)
+			{
+				theWindow->lastX = xPos;
+				theWindow->lastY = yPos;
+				theWindow->mousedFirstMoved = false;
+			}
+			theWindow->xChange = xPos - theWindow->lastX;
+			theWindow->yChange = theWindow->lastY - yPos;
+			theWindow->lastX = xPos;
+			theWindow->lastY = yPos;
+		}
+		
 	}
 }

@@ -18,6 +18,13 @@ namespace Rapid
 			GLint m_bufferWidth, m_bufferHeight;
 			const char* m_windowTitle;
 			GLFWwindow* mainWindow;
+
+			bool keys[1024];
+			GLfloat lastX;
+			GLfloat lastY;
+			GLfloat xChange;
+			GLfloat yChange;
+			bool mousedFirstMoved;
 			
 		public:
 			Window(const char* title, int width, int height);
@@ -27,8 +34,14 @@ namespace Rapid
 			void Clear() const;
 			GLfloat GetBufferWidth() { return m_bufferWidth; }
 			GLfloat GetBufferHeight()	{ return m_bufferHeight; }
+			bool* GetKeys() { return keys; }
+			GLfloat GetXChange();
+			GLfloat GetYChange();
 		private:
 			bool Init();
+			static void HandleKeys(GLFWwindow *window, int key, int code, int action, int mode);
+			static void HandleMouse(GLFWwindow* window, double xPos, double yPos);
+			void CreateCallBacks();
 		};
 	}
 }
