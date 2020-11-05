@@ -5,6 +5,8 @@ namespace Rapid
 	namespace Graphics
 	{
 		void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+
+		Window::Window(){}
 		
 		Window::Window(const char* title, int width, int height)
 		{

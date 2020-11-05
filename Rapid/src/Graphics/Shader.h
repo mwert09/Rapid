@@ -16,7 +16,7 @@ class Shader
 public:
 
 private:
-	GLuint shaderID, uniformProjection, uniformModel;
+	GLuint shaderID, uniformProjection, uniformModel, uniformView;
 
 public:
 	Shader();
@@ -25,6 +25,7 @@ public:
 	void CreateFromFiles(const char* vertexLocation, const char* fragmentLocation);
 	GLuint GetProjectionLocation();
 	GLuint GetModelLocation();
+	GLuint GetViewLocation();
 	void UseShader();
 	void ClearShader();
 	

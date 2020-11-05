@@ -27,6 +27,7 @@ namespace Rapid
 			bool mousedFirstMoved;
 			
 		public:
+			Window();
 			Window(const char* title, int width, int height);
 			~Window();
 			void Update() const;
