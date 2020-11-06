@@ -4,6 +4,8 @@
  *
  * 
  */
+#define STB_IMAGE_IMPLEMENTATION
+
 #include <iostream>
 #include <string.h>
 #include <cmath>
@@ -17,6 +19,7 @@
 #include "src/Graphics/Shader.h"
 #include "src/Graphics/Window.h"
 #include "src/Graphics/Camera.h"
+#include "src/Graphics/Texture.h"
 
 using namespace Rapid;
 using namespace Graphics;
@@ -25,8 +28,13 @@ const float toRadians = 3.14159265f / 180.0f;
 
 Window mainWindow = Window("Rapid", 800, 600);
 Camera camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.2f);
+
 std::vector<Mesh*> meshList;
 std::vector<Shader> shaderList;
+
+//Texture rockTexture = Texture("Textures/rocks.png");
+Texture fabricTexture = Texture("Textures/fabric.png");
+Texture brickTexture = Texture("Textures/brick.png");
 
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
@@ -41,18 +49,18 @@ void CreateObjects()
 	};
 	
 	GLfloat vertices[] = {
-		-1.0f, -1.0f, 0.0f,
-		0.0f, -1.0f, 1.0f,
-		1.0f, -1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f
+		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, -1.0f, 1.0f, 0.5f, 0.0f,
+		1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.5f, 1.0f
 	};
 
 	Mesh* obj1 = new Mesh();
-	obj1->CreateMesh(vertices, indices, 12, 12);
+	obj1->CreateMesh(vertices, indices, 20, 12);
 	meshList.push_back(obj1);
 
 	Mesh* obj2 = new Mesh();
-	obj2->CreateMesh(vertices, indices, 12, 12);
+	obj2->CreateMesh(vertices, indices, 20, 12);
 	meshList.push_back(obj2);
 	
 }
@@ -69,6 +77,10 @@ int main()
 	CreateObjects();
 	CreateShaders();
 
+	//rockTexture.LoadTexture();
+	fabricTexture.LoadTexture();
+	brickTexture.LoadTexture();
+	
 	GLuint uniformProjection = 0;
 	GLuint uniformModel = 0;
 	GLuint uniformView = 0;
@@ -100,13 +112,14 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.CalculateViewMatrix()));
-
+		brickTexture.UseTexture();
 		meshList[0]->RenderMesh();
 
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(0.0f, 1.0f, -2.5f));
 		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		fabricTexture.UseTexture();
 		meshList[1]->RenderMesh();
 		
 		glUseProgram(0);
