@@ -7,6 +7,8 @@
 
 #include <GLFW/glfw3.h>
 
+#include <iostream>
+
 namespace Rapid{
 	
 	class Camera
@@ -23,9 +25,10 @@ namespace Rapid{
 
 		GLfloat m_MovementSpeed;
 		GLfloat m_TurnSpeed;
-	public:
 
 		
+	public:
+		GLfloat fieldOfView = 45.0f;
 	public:
 		Camera();
 		Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLfloat startPitch, GLfloat startMoveSpeed, GLfloat startTurnSpeed);
@@ -34,6 +37,8 @@ namespace Rapid{
 		void Update();
 		void InputControl(bool* keys, GLfloat deltaTime);
 		void MouseControl(GLfloat xChange, GLfloat yChange);
+		void HandleScroll(GLfloat xOffset, GLfloat yOffset);
+		GLfloat GetFOV();
 		glm::mat4 CalculateViewMatrix();
 	};
 

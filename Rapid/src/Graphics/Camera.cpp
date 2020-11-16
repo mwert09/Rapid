@@ -77,6 +77,24 @@ namespace Rapid
 		Update();
 	}
 
+	void Camera::HandleScroll(GLfloat xOffset, GLfloat yOffset)
+	{
+		fieldOfView -= (GLfloat)yOffset;
+		if (fieldOfView < 1.0f)
+		{
+			fieldOfView = 1.0f;
+		}
+		if (fieldOfView > 45.0f)
+		{
+			fieldOfView = 45.0f;
+		}
+	}
+
+	GLfloat Camera::GetFOV()
+	{
+		return fieldOfView;
+	}
+
 	glm::mat4 Camera::CalculateViewMatrix()
 	{
 		return glm::lookAt(m_Position, m_Position + m_Front, m_Up);

@@ -16,7 +16,7 @@ class Shader
 public:
 
 private:
-	GLuint shaderID, uniformProjection, uniformModel, uniformView;
+	GLuint shaderID, uniformProjection, uniformModel, uniformView, uniformAmbientIntensity, uniformAmbientColour;
 
 public:
 	Shader();
@@ -26,6 +26,8 @@ public:
 	GLuint GetProjectionLocation();
 	GLuint GetModelLocation();
 	GLuint GetViewLocation();
+	GLuint GetAmbientIntensityLocation();
+	GLuint GetAmbientColourLocation();
 	void UseShader();
 	void ClearShader();
 	

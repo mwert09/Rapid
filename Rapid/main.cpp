@@ -20,6 +20,7 @@
 #include "src/Graphics/Window.h"
 #include "src/Graphics/Camera.h"
 #include "src/Graphics/Texture.h"
+#include "src/Graphics/Light.h"
 
 using namespace Rapid;
 using namespace Graphics;
@@ -35,6 +36,8 @@ std::vector<Shader> shaderList;
 //Texture rockTexture = Texture("Textures/rocks.png");
 Texture fabricTexture = Texture("Textures/fabric.png");
 Texture brickTexture = Texture("Textures/brick.png");
+
+Light mainLight;
 
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
@@ -80,28 +83,39 @@ int main()
 	//rockTexture.LoadTexture();
 	fabricTexture.LoadTexture();
 	brickTexture.LoadTexture();
+
+	mainLight = Light(1.0f, 0.0f, 0.2f, 1.0f);
 	
 	GLuint uniformProjection = 0;
 	GLuint uniformModel = 0;
 	GLuint uniformView = 0;
+	GLuint uniformAmbientIntensity = 0;
+	GLuint uniformAmbientColour = 0;
 
 	glm::mat4 projection = glm::mat4(1.0f);
-	projection = glm::perspective(45.0f, mainWindow.GetBufferWidth() / mainWindow.GetBufferHeight(), 0.1f, 100.0f);
 	
 	// Render Loop
 	while (!mainWindow.Closed())
 	{
+		projection = glm::perspective(glm::radians(camera.GetFOV()), mainWindow.GetBufferWidth() / mainWindow.GetBufferHeight(), 0.1f, 100.0f);
+
 		GLfloat now = glfwGetTime();
 		deltaTime = now - lastTime;
 		lastTime = now;
 		
 		camera.InputControl(mainWindow.GetKeys(), deltaTime);
 		camera.MouseControl(mainWindow.GetXChange(), mainWindow.GetYChange());
+		camera.HandleScroll(mainWindow.GetXOffset(), mainWindow.GetYOffset());
 		mainWindow.Clear();
+		
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
 		uniformProjection = shaderList[0].GetProjectionLocation();
 		uniformView = shaderList[0].GetViewLocation();
+		uniformAmbientIntensity = shaderList[0].GetAmbientIntensityLocation();
+		uniformAmbientColour = shaderList[0].GetAmbientColourLocation();
+
+		mainLight.UseLight(uniformAmbientIntensity, uniformAmbientColour);
 		
 		glm::mat4 model = glm::mat4(1.0f);
 

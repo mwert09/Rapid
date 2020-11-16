@@ -11,6 +11,7 @@ namespace Rapid
 		class Window
 		{
 		public:
+			
 		private:
 			// Window Dimensions - Pencere Boyutlari
 			GLint m_WINDOW_WIDTH = 800;
@@ -24,7 +25,10 @@ namespace Rapid
 			GLfloat lastY;
 			GLfloat xChange;
 			GLfloat yChange;
+			GLfloat XOffsetChange;
+			GLfloat YOffsetChange;
 			bool mousedFirstMoved;
+			bool scrollFirstMoved;
 			
 		public:
 			Window();
@@ -38,10 +42,13 @@ namespace Rapid
 			bool* GetKeys() { return keys; }
 			GLfloat GetXChange();
 			GLfloat GetYChange();
+			GLfloat GetYOffset();
+			GLfloat GetXOffset();
 		private:
 			bool Init();
 			static void HandleKeys(GLFWwindow *window, int key, int code, int action, int mode);
 			static void HandleMouse(GLFWwindow* window, double xPos, double yPos);
+			static void HandleScroll(GLFWwindow* window, double xOffset, double yOffset);
 			void CreateCallBacks();
 		};
 	}

@@ -23,6 +23,8 @@ namespace Rapid
 			}
 			xChange = 0.0f;
 			yChange = 0.0f;
+			XOffsetChange = 0.0f;
+			YOffsetChange = 0.0f;
 		}
 
 		Window::~Window()
@@ -113,6 +115,7 @@ namespace Rapid
 		{
 			glfwSetKeyCallback(mainWindow, HandleKeys);
 			glfwSetCursorPosCallback(mainWindow, HandleMouse);
+			glfwSetScrollCallback(mainWindow, HandleScroll);
 		}
 
 		GLfloat Window::GetXChange()
@@ -126,6 +129,20 @@ namespace Rapid
 		{
 			GLfloat theChange = yChange;
 			yChange = 0.0f;
+			return theChange;
+		}
+
+		GLfloat Window::GetXOffset()
+		{
+			GLfloat theChange = XOffsetChange;
+			XOffsetChange = 0.0f;
+			return theChange;
+		}
+		
+		GLfloat Window::GetYOffset()
+		{
+			GLfloat theChange = YOffsetChange;
+			YOffsetChange = 0.0f;
 			return theChange;
 		}
 		
@@ -162,6 +179,13 @@ namespace Rapid
 			theWindow->yChange = theWindow->lastY - yPos;
 			theWindow->lastX = xPos;
 			theWindow->lastY = yPos;
+		}
+
+		void Window::HandleScroll(GLFWwindow* window, double xOffset, double yOffset)
+		{
+			Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));	
+			theWindow->XOffsetChange = xOffset;
+			theWindow->YOffsetChange = yOffset;
 		}
 		
 	}
