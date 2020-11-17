@@ -52,18 +52,20 @@ void CreateObjects()
 	};
 	
 	GLfloat vertices[] = {
-		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, -1.0f, 1.0f, 0.5f, 0.0f,
-		1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.5f, 1.0f
+		-1.0f, -1.0f, 0.0f,	 0.0f, 0.0f,	0.0f, 0.0f, 0.0f,
+		0.0f, -1.0f, 1.0f,	 0.5f, 0.0f,	0.0f, 0.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,	 1.0f, 0.0f,	0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,	 0.5f, 1.0f,	0.0f, 0.0f, 0.0f
 	};
 
+	Utils::CalculateAverageNormals(indices, 12, vertices, 32, 8, 5);
+
 	Mesh* obj1 = new Mesh();
-	obj1->CreateMesh(vertices, indices, 20, 12);
+	obj1->CreateMesh(vertices, indices, 32, 12);
 	meshList.push_back(obj1);
 
 	Mesh* obj2 = new Mesh();
-	obj2->CreateMesh(vertices, indices, 20, 12);
+	obj2->CreateMesh(vertices, indices, 32, 12);
 	meshList.push_back(obj2);
 	
 }
@@ -84,13 +86,15 @@ int main()
 	fabricTexture.LoadTexture();
 	brickTexture.LoadTexture();
 
-	mainLight = Light(1.0f, 0.0f, 0.2f, 1.0f);
+	mainLight = Light(1.0f, 1.0f, 1.0f, 0.5f, 2.0f, -1.0f, -2.0f, 1.0f);
 	
 	GLuint uniformProjection = 0;
 	GLuint uniformModel = 0;
 	GLuint uniformView = 0;
 	GLuint uniformAmbientIntensity = 0;
 	GLuint uniformAmbientColour = 0;
+	GLuint uniformDirection = 0;
+	GLuint uniformDiffuseIntensity = 0;
 
 	glm::mat4 projection = glm::mat4(1.0f);
 	
@@ -114,8 +118,10 @@ int main()
 		uniformView = shaderList[0].GetViewLocation();
 		uniformAmbientIntensity = shaderList[0].GetAmbientIntensityLocation();
 		uniformAmbientColour = shaderList[0].GetAmbientColourLocation();
+		uniformDirection = shaderList[0].GetDirectionLocation();
+		uniformDiffuseIntensity = shaderList[0].GetDiffuseIntensityLocation();
 
-		mainLight.UseLight(uniformAmbientIntensity, uniformAmbientColour);
+		mainLight.UseLight(uniformAmbientIntensity, uniformAmbientColour, uniformDiffuseIntensity, uniformDirection);
 		
 		glm::mat4 model = glm::mat4(1.0f);
 
