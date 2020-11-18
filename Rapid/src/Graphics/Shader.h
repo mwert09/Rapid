@@ -17,7 +17,8 @@ public:
 
 private:
 	GLuint shaderID, uniformProjection, uniformModel, uniformView,
-	uniformAmbientIntensity, uniformAmbientColour, uniformDiffuseIntensity, uniformDirection;
+		uniformAmbientIntensity, uniformAmbientColour, uniformDiffuseIntensity, uniformDirection,
+		uniformEyePosition, uniformSpecularIntensity, uniformShininess;
 
 public:
 	Shader();
@@ -31,6 +32,9 @@ public:
 	GLuint GetAmbientColourLocation();
 	GLuint GetDiffuseIntensityLocation();
 	GLuint GetDirectionLocation();
+	GLuint GetSpecularIntensityLocation();
+	GLuint GetShininessLocation();
+	GLuint GetEyePositionLocation();
 	void UseShader();
 	void ClearShader();
 	

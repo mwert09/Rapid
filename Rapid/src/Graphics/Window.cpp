@@ -6,7 +6,24 @@ namespace Rapid
 	{
 		void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
-		Window::Window(){}
+		Window::Window()
+		{
+			m_windowTitle = "";
+			m_WINDOW_WIDTH = 800;
+			m_WINDOW_HEIGHT = 600;
+			if (!Init())
+			{
+				glfwTerminate();
+			}
+			for (size_t i = 0; i < 1024; i++)
+			{
+				keys[i] = false;
+			}
+			xChange = 0.0f;
+			yChange = 0.0f;
+			XOffsetChange = 0.0f;
+			YOffsetChange = 0.0f;
+		}
 		
 		Window::Window(const char* title, int width, int height)
 		{
@@ -51,7 +68,7 @@ namespace Rapid
 			glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 			
 			// Create Window - Pencere olustur
-			mainWindow = glfwCreateWindow(m_WINDOW_WIDTH, m_WINDOW_HEIGHT, m_windowTitle, NULL, NULL);
+			mainWindow = glfwCreateWindow(m_WINDOW_WIDTH, m_WINDOW_HEIGHT, m_windowTitle, glfwGetPrimaryMonitor(), NULL);
 			if (!mainWindow)
 			{
 				std::cout << "GLFW window creation failed! - GLFW pencere olusturulamadi!" << std::endl;

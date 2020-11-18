@@ -100,4 +100,9 @@ namespace Rapid
 		return glm::lookAt(m_Position, m_Position + m_Front, m_Up);
 	}
 
+	glm::vec3 Camera::GetCameraPosition()
+	{
+		return m_Position;
+	}
+
 }
