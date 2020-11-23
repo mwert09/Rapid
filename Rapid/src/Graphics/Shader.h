@@ -8,6 +8,9 @@
 #include <GL/glew.h>
 
 #include "../../src/Utils/Utils.h"
+#include "DirectionalLight.h"
+#include "PointLight.h"
+#include "CommonValues.h"
 
 namespace Rapid	{	namespace Graphics	{
 		
@@ -16,9 +19,32 @@ class Shader
 public:
 
 private:
+	int pointLightCount;
+	
 	GLuint shaderID, uniformProjection, uniformModel, uniformView,
-		uniformAmbientIntensity, uniformAmbientColour, uniformDiffuseIntensity, uniformDirection,
 		uniformEyePosition, uniformSpecularIntensity, uniformShininess;
+
+	struct
+	{
+		GLuint uniformColour;
+		GLuint uniformAmbientIntensity;
+		GLuint uniformDiffuseIntensity;
+
+		GLuint uniformDirection;
+	}uniformDirectionalLight;
+
+	GLuint uniformPointLightCount;
+	struct
+	{
+		GLuint uniformColour;
+		GLuint uniformAmbientIntensity;
+		GLuint uniformDiffuseIntensity;
+
+		GLuint uniformPosition;
+		GLuint uniformConstant;
+		GLuint uniformLinear;
+		GLuint uniformExponent;
+	}uniformPointLight[MAX_POINT_LIGHTS];
 
 public:
 	Shader();
@@ -35,6 +61,8 @@ public:
 	GLuint GetSpecularIntensityLocation();
 	GLuint GetShininessLocation();
 	GLuint GetEyePositionLocation();
+	void SetDirectionalLight(DirectionalLight* dLight);
+	void SetPointLights(PointLight* pLight, unsigned int lightCount);
 	void UseShader();
 	void ClearShader();
 	

@@ -12,15 +12,12 @@ namespace Rapid
 		public:
 
 			Light();
-			Light(GLfloat red, GLfloat green, GLfloat blue, GLfloat intensity, GLfloat xDir, GLfloat yDir, GLfloat zDir, GLfloat dIntensity);
+			Light(GLfloat red, GLfloat green, GLfloat blue, GLfloat intensity, GLfloat dIntensity);
 			~Light();
-			void UseLight(GLfloat ambientIntensityLocation, GLfloat ambientColorLocation, GLfloat diffuseIntensityLocation, GLfloat directionLocation);
 
-		private:
+		protected:
 			glm::vec3 color;
 			GLfloat ambientIntensity;
-
-			glm::vec3 direction;
 			GLfloat diffuseIntensity;
 		};
 	}
