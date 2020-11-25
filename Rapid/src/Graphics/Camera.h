@@ -39,6 +39,7 @@ namespace Rapid{
 		void MouseControl(GLfloat xChange, GLfloat yChange);
 		void HandleScroll(GLfloat xOffset, GLfloat yOffset);
 		glm::vec3 GetCameraPosition();
+		glm::vec3 GetCameraDirection();
 		GLfloat GetFOV();
 		glm::mat4 CalculateViewMatrix();
 	};

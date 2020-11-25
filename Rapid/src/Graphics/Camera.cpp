@@ -105,4 +105,10 @@ namespace Rapid
 		return m_Position;
 	}
 
+	glm::vec3 Camera::GetCameraDirection()
+	{
+		return glm::normalize(m_Front);
+	}
+
+
 }

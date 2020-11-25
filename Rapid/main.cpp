@@ -22,6 +22,7 @@
 #include "src/Graphics/Camera.h"
 #include "src/Graphics/Texture.h"
 #include "src/Graphics/DirectionalLight.h"
+#include "src/Graphics/SpotLight.h"
 #include "src/Graphics/Material.h"
 
 using namespace Rapid;
@@ -44,6 +45,7 @@ Material dullMaterial;
 
 DirectionalLight mainLight;
 PointLight pointLights[MAX_POINT_LIGHTS];
+SpotLight spotLights[MAX_SPOT_LIGHTS];
 
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
@@ -112,11 +114,21 @@ int main()
 	dullMaterial = Material(0.3f, 4);
 
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f, 0.01f, 0.1f, -1.0f, -2.0f, 2.0f);
+	
 	unsigned int pointLightCount = 0;
-	pointLights[0] = PointLight(0.0f, 1.0f, 0.0f, 0.6f, 1.0f, -4.0f, 0.0f, 0.0f, 0.3f, 0.2f, 0.1f);
+	pointLights[0] = PointLight(0.0f, 1.0f, 0.0f, 0.0f, 0.1f, -4.0f, 0.0f, 0.0f, 0.3f, 0.2f, 0.1f);
 	pointLightCount++;
-	pointLights[1] = PointLight(0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 4.0f, 2.0f, 0.0f, 0.3f, 0.1f, 0.1f);
+	pointLights[1] = PointLight(0.0f, 0.0f, 1.0f, 0.0f, 0.1f, 4.0f, 2.0f, 0.0f, 0.3f, 0.1f, 0.1f);
 	pointLightCount++;
+
+	unsigned int spotLightCount = 0;
+	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
+		0.6f, 1.0f,
+		0.0f, 0.0f, 0.0f,
+		0.0f, -1.0f, 0.0f,
+		0.3f, 0.2f, 0.1f,
+		20.0f);
+	spotLightCount++;
 	
 	GLuint uniformProjection = 0;
 	GLuint uniformModel = 0;
@@ -149,8 +161,13 @@ int main()
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
 
+		glm::vec3 lowerLight = camera.GetCameraPosition();
+		lowerLight.y -= 0.4f;
+		spotLights[0].SetFlash(lowerLight, camera.GetCameraDirection());
+
 		shaderList[0].SetDirectionalLight(&mainLight);
 		shaderList[0].SetPointLights(pointLights, pointLightCount);
+		shaderList[0].SetSpotLights(spotLights, spotLightCount);
 		
 
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
