@@ -68,7 +68,7 @@ namespace Rapid
 			glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 			
 			// Create Window - Pencere olustur
-			mainWindow = glfwCreateWindow(m_WINDOW_WIDTH, m_WINDOW_HEIGHT, m_windowTitle, glfwGetPrimaryMonitor(), NULL);
+			mainWindow = glfwCreateWindow(m_WINDOW_WIDTH, m_WINDOW_HEIGHT, m_windowTitle, NULL, NULL);
 			if (!mainWindow)
 			{
 				std::cout << "GLFW window creation failed! - GLFW pencere olusturulamadi!" << std::endl;

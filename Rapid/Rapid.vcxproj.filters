@@ -51,6 +51,9 @@
     <ClCompile Include="src\Graphics\SpotLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Graphics\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Graphics\Window.h">
@@ -92,11 +95,15 @@
     <ClInclude Include="src\Graphics\SpotLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Graphics\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="glew32.dll" />
     <None Include="glfw3.dll" />
     <None Include="Shaders\shader.frag" />
     <None Include="Shaders\shader.vert" />
+    <None Include="assimp-vc142-mt.dll" />
   </ItemGroup>
 </Project>
