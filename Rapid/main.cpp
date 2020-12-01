@@ -121,8 +121,8 @@ int main()
 	fabricTexture.LoadTextureA();
 	brickTexture.LoadTextureA();
 
-	shinyMaterial = Material(1.0f, 32, 10);
-	dullMaterial = Material(0.3f, 4, 2);
+	shinyMaterial = Material(1.0f, 32);
+	dullMaterial = Material(0.3f, 4);
 
 	containerModel = Model();
 	containerModel.LoadModel("Models/Container.obj");
