@@ -3,6 +3,9 @@
 #include <iostream>
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
+#include "../../Dependencies/imgui/imgui.h"
+#include "../../Dependencies/imgui/imgui_impl_glfw.h"
+#include "../../Dependencies/imgui/imgui_impl_opengl3.h"
 
 namespace Rapid
 {
@@ -29,12 +32,18 @@ namespace Rapid
 			GLfloat YOffsetChange;
 			bool mousedFirstMoved;
 			bool scrollFirstMoved;
+			bool cursorMode;
+
+			// temp
+			bool show_demo_window = true;
+			bool show_another_window = false;
+			ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 			
 		public:
 			Window();
 			Window(const char* title, int width, int height);
 			~Window();
-			void Update() const;
+			void Update();
 			bool Closed() const;
 			void Clear() const;
 			GLfloat GetBufferWidth() { return m_bufferWidth; }

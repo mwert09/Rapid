@@ -31,7 +31,8 @@ using namespace Graphics;
 
 const float toRadians = 3.14159265f / 180.0f;
 
-Window mainWindow = Window("Rapid", 800, 600);
+
+Window mainWindow = Window("Rapid", 1280, 720);
 Camera camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 2.0f, 0.2f);
 
 std::vector<Mesh*> meshList;
@@ -40,6 +41,8 @@ std::vector<Shader> shaderList;
 //Texture rockTexture = Texture("Textures/rocks.png");
 Texture fabricTexture = Texture("Textures/fabric.png");
 Texture brickTexture = Texture("Textures/brick.png");
+Texture diffuseMap = Texture("Textures/container2.png");
+Texture specularMap = Texture("Textures/container2_specular.png");
 
 Material shinyMaterial;
 Material dullMaterial;
@@ -108,7 +111,9 @@ void CreateShaders()
 }
 
 int main()
-{	
+{
+	
+	
 	CreateObjects();
 	CreateShaders();
 
@@ -116,8 +121,8 @@ int main()
 	fabricTexture.LoadTextureA();
 	brickTexture.LoadTextureA();
 
-	shinyMaterial = Material(1.0f, 32);
-	dullMaterial = Material(0.3f, 4);
+	shinyMaterial = Material(1.0f, 32, 10);
+	dullMaterial = Material(0.3f, 4, 2);
 
 	containerModel = Model();
 	containerModel.LoadModel("Models/Container.obj");
@@ -163,6 +168,8 @@ int main()
 		GLfloat now = glfwGetTime();
 		deltaTime = now - lastTime;
 		lastTime = now;
+
+		
 		
 		camera.InputControl(mainWindow.GetKeys(), deltaTime);
 		camera.MouseControl(mainWindow.GetXChange(), mainWindow.GetYChange());
@@ -236,9 +243,11 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		xWing.RenderModel();
-	
+		
 		glUseProgram(0);
+		
 		mainWindow.Update();
+		
 	}
 	
 	return 0;
