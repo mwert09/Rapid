@@ -15,7 +15,7 @@ namespace Rapid
 			Light(GLfloat red, GLfloat green, GLfloat blue, GLfloat intensity, GLfloat dIntensity);
 			~Light();
 
-		protected:
+		public:
 			glm::vec3 color;
 			GLfloat ambientIntensity;
 			GLfloat diffuseIntensity;

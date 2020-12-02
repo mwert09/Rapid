@@ -33,11 +33,6 @@ namespace Rapid
 			bool mousedFirstMoved;
 			bool scrollFirstMoved;
 			bool cursorMode;
-
-			// temp
-			bool show_demo_window = true;
-			bool show_another_window = false;
-			ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 			
 		public:
 			Window();
@@ -53,6 +48,8 @@ namespace Rapid
 			GLfloat GetYChange();
 			GLfloat GetYOffset();
 			GLfloat GetXOffset();
+			int GetWindowWidth();
+			int GetWindowHeight();
 		private:
 			bool Init();
 			static void HandleKeys(GLFWwindow *window, int key, int code, int action, int mode);

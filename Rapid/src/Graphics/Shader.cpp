@@ -81,6 +81,19 @@ void Shader::SetDirectionalLight(DirectionalLight* dLight)
 	dLight->UseLight(uniformDirectionalLight.uniformAmbientIntensity, uniformDirectionalLight.uniformColour, uniformDirectionalLight.uniformDiffuseIntensity, uniformDirectionalLight.uniformDirection);
 }
 
+void Shader::UpdateDirectionalLight(DirectionalLight* dLight, float directionalLightRedValue, float directionalLightGreenValue, float directionalLightBlueValue, float directionalLightIntensity, float directionalLightDiffuseIntensity, float directionalLightXDir, float directionalLightYDir, float directionalLightZDir)
+{
+	dLight->color.r = directionalLightRedValue;
+	dLight->color.g = directionalLightGreenValue;
+	dLight->color.b = directionalLightBlueValue;
+	dLight->ambientIntensity = directionalLightIntensity;
+	dLight->diffuseIntensity = directionalLightDiffuseIntensity;
+	dLight->direction.x = directionalLightXDir;
+	dLight->direction.y = directionalLightYDir;
+	dLight->direction.z = directionalLightZDir;
+	dLight->UpdateLight(uniformDirectionalLight.uniformAmbientIntensity, uniformDirectionalLight.uniformColour, uniformDirectionalLight.uniformDiffuseIntensity, uniformDirectionalLight.uniformDirection);
+}
+	
 void Shader::SetPointLights(PointLight* pLight, unsigned lightCount)
 {
 	if(lightCount > MAX_POINT_LIGHTS)

@@ -31,7 +31,6 @@ using namespace Graphics;
 
 const float toRadians = 3.14159265f / 180.0f;
 
-
 Window mainWindow = Window("Rapid", 1280, 720);
 Camera camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 2.0f, 0.2f);
 
@@ -112,11 +111,10 @@ void CreateShaders()
 
 int main()
 {
-	
-	
+
 	CreateObjects();
 	CreateShaders();
-
+	
 	//rockTexture.LoadTexture();
 	fabricTexture.LoadTextureA();
 	brickTexture.LoadTextureA();
@@ -132,8 +130,10 @@ int main()
 
 	xWing = Model();
 	xWing.LoadModel("Models/x-wing.obj");
-
-	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f, 0.06f, 0.6f, -1.0f, -2.0f, 2.0f);
+	float directionalLightRedValue = 1, directionalLightGreenValue = 1, directionalLightBlueValue = 1, directionalLightIntensity = 1, directionalLightDiffuseIntensity = 1, directionalLightXDir = 1, directionalLightYDir = 0, directionalLightZDir = 0.20f;
+	mainLight = DirectionalLight(directionalLightRedValue, directionalLightGreenValue, directionalLightBlueValue,
+		directionalLightIntensity, directionalLightDiffuseIntensity,
+		directionalLightXDir, directionalLightYDir, directionalLightZDir);
 	
 	unsigned int pointLightCount = 0;
 	pointLights[0] = PointLight(0.0f, 1.0f, 0.0f, 0.0f, 0.1f, -4.0f, 0.0f, 0.0f, 0.3f, 0.2f, 0.1f);
@@ -158,18 +158,40 @@ int main()
 	GLuint uniformShininess = 0;
 
 	glm::mat4 projection = glm::mat4(1.0f);
-
 	
 	// Render Loop
 	while (!mainWindow.Closed())
 	{
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+		{
+			static float f = 0.0f;
+			static int counter = 0;
+
+			ImGui::Begin("Directional Light Settings");                          // Create a window called "Hello, world!" and append into it.
+
+			if (ImGui::SliderFloat("Directional Light Intensity", &directionalLightIntensity, 0.0f, 1.0f) |            // Edit 1 float using a slider from 0.0f to 1.0f
+				ImGui::SliderFloat("Directional Light Red Color", &directionalLightRedValue, 0.0f, 1.0f) |
+				ImGui::SliderFloat("Directional Light Green Color", &directionalLightGreenValue, 0.0f, 1.0f) |
+				ImGui::SliderFloat("Directional Light Blue Color", &directionalLightBlueValue, 0.0f, 1.0f))
+			{
+				shaderList[0].UpdateDirectionalLight(&mainLight, directionalLightRedValue, directionalLightGreenValue, directionalLightBlueValue,
+					directionalLightIntensity, directionalLightDiffuseIntensity, directionalLightXDir, directionalLightYDir, directionalLightZDir);
+			}
+
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			ImGui::End();
+		}
+
+		ImGui::Render();
+		
 		projection = glm::perspective(glm::radians(camera.GetFOV()), mainWindow.GetBufferWidth() / mainWindow.GetBufferHeight(), 0.1f, 100.0f);
 
 		GLfloat now = glfwGetTime();
 		deltaTime = now - lastTime;
 		lastTime = now;
-
-		
 		
 		camera.InputControl(mainWindow.GetKeys(), deltaTime);
 		camera.MouseControl(mainWindow.GetXChange(), mainWindow.GetYChange());

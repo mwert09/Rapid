@@ -83,6 +83,9 @@ public:
 	GLuint getUniformDiffuse();
 	GLuint GetuniformSpecular();
 	void SetDirectionalLight(DirectionalLight* dLight);
+	void UpdateDirectionalLight(DirectionalLight* dLight, float directionalLightRedValue, float directionalLightGreenValue, float directionalLightBlueValue,
+		float directionalLightIntensity, float directionalLightDiffuseIntensity,
+		float directionalLightXDir, float directionalLightYDir, float directionalLightZDir);
 	void SetPointLights(PointLight* pLight, unsigned int lightCount);
 	void SetSpotLights(SpotLight* sLight, unsigned int lightCount);
 	void UseShader();
