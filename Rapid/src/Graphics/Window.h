@@ -14,7 +14,7 @@ namespace Rapid
 		class Window
 		{
 		public:
-			
+			bool cursorMode;
 		private:
 			// Window Dimensions - Pencere Boyutlari
 			GLint m_WINDOW_WIDTH = 800;
@@ -32,7 +32,7 @@ namespace Rapid
 			GLfloat YOffsetChange;
 			bool mousedFirstMoved;
 			bool scrollFirstMoved;
-			bool cursorMode;
+			
 			
 		public:
 			Window();
@@ -50,6 +50,7 @@ namespace Rapid
 			GLfloat GetXOffset();
 			int GetWindowWidth();
 			int GetWindowHeight();
+			bool* getsKeys() { return keys; }
 		private:
 			bool Init();
 			static void HandleKeys(GLFWwindow *window, int key, int code, int action, int mode);

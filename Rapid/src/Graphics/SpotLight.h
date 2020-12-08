@@ -7,14 +7,16 @@ namespace Rapid
 	{
 		class SpotLight : public PointLight
 		{
-		private:
+		public:
 			glm::vec3 direction;
 			GLfloat edge, procEdge;
+			bool isOn;
 		public:
 			SpotLight();
 			~SpotLight();
 
-			SpotLight(GLfloat red, GLfloat green, GLfloat blue, GLfloat intensity, GLfloat dIntensity, GLfloat xPos, GLfloat yPos, GLfloat zPos,
+			SpotLight(GLuint shadowWidth, GLuint shadowHeight,
+				GLfloat near, GLfloat far, GLfloat red, GLfloat green, GLfloat blue, GLfloat intensity, GLfloat dIntensity, GLfloat xPos, GLfloat yPos, GLfloat zPos,
 				GLfloat xDir, GLfloat yDir, GLfloat zDir,
 				GLfloat con, GLfloat lin, GLfloat exp,
 				GLfloat edg);
@@ -24,7 +26,10 @@ namespace Rapid
 				GLuint constantLocation, GLuint linearLocation, GLuint exponentLocation,
 				GLuint edgeLocation);
 
+			
+
 			void SetFlash(glm::vec3 pos, glm::vec3 dir);
+			void Toggle() { isOn != isOn; }
 		};
 	}
 }

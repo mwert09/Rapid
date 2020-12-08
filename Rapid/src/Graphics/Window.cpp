@@ -163,7 +163,7 @@ namespace Rapid
 			glfwPollEvents();
 
 			// Clear Window - Diger karenin olusmasi icin bu kareyi temizleme
-			glClearColor(0.0f, 0.f, 0.f, 1.0f);
+			//glClearColor(0.0f, 0.f, 0.f, 1.0f);
 
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 			if (ImGuiConfigFlags_ViewportsEnable)
@@ -173,6 +173,7 @@ namespace Rapid
 				ImGui::RenderPlatformWindowsDefault();
 				glfwMakeContextCurrent(backup_current_context);
 			}
+			
 			glfwSwapBuffers(mainWindow);
 		}
 

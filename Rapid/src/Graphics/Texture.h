@@ -26,6 +26,10 @@ namespace Rapid
 			Texture(const char* fileLoc);
 			~Texture();
 
+			GLuint GetTextureID()
+			{
+				return textureID;
+			}
 			bool LoadTexture();
 			bool LoadTextureA();
 			void UseTexture();
