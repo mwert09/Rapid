@@ -25,6 +25,7 @@
 #include "src/Graphics/SpotLight.h"
 #include "src/Graphics/Material.h"
 #include "src/Graphics/Model.h"
+#include "src/Graphics/SkyBox.h"
 
 using namespace Rapid;
 using namespace Graphics;
@@ -50,24 +51,22 @@ std::vector<Shader> shaderList;
 Shader directionalShadowShader;
 Shader omniShadowShader;
 
-//Texture rockTexture = Texture("Textures/rocks.png");
-Texture fabricTexture = Texture("Textures/fabric.png");
-Texture brickTexture = Texture("Textures/brick.png");
+Texture sandstone = Texture("Textures/sandstone.png");
 Texture diffuseMap = Texture("Textures/container2.png");
 Texture specularMap = Texture("Textures/container2_specular.png");
-Texture ground = Texture("Textures/Ground_Seamless_Texture.jpg");
+Texture ground = Texture("Textures/Sand_005_baseColor.jpg");
 
 Material shinyMaterial;
 Material dullMaterial;
 
-Model carModel;
 Model containerModel;
-Model xWing;
 Model BlackHawk;
 
 DirectionalLight mainLight;
 PointLight pointLights[MAX_POINT_LIGHTS];
 SpotLight spotLights[MAX_SPOT_LIGHTS];
+
+SkyBox skybox;
 
 unsigned int pointLightCount = 0;
 unsigned int spotLightCount = 0;
@@ -134,50 +133,50 @@ void RenderScene()
 {
 	glm::mat4 model = glm::mat4(1.0f);
 
-	model = glm::translate(model, glm::vec3(0.0f, 0.0f, -2.5f));
-	//model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
+	model = glm::translate(model, glm::vec3(-3.0f, 1.0f, -50.5f));
+	model = glm::scale(model, glm::vec3(10.4f, 5.4f, 5.4f));
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-	brickTexture.UseTexture();
+	sandstone.UseTexture();
 	shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 	meshList[0]->RenderMesh();
 
-	model = glm::mat4(1.0f);
+	/*model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(0.0f, 4.0f, -2.5f));
 	//model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 	fabricTexture.UseTexture();
 	dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-	meshList[1]->RenderMesh();
+	meshList[1]->RenderMesh();*/
 
 	model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(0.0f, -2.0f, -0.0f));
-	//model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
+	model = glm::translate(model, glm::vec3(0.0f, 0.0f, -0.0f));
+	model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 	ground.UseTexture();
 	dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 	meshList[2]->RenderMesh();
 
 	model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(0.0f, -2.0f, -0.0f));
+	model = glm::translate(model, glm::vec3(6.0f, 0.0f, 0.0f));
 	model = glm::scale(model, glm::vec3(0.006f, 0.006f, 0.006f));
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 	dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 	containerModel.RenderModel();
 
 	model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(-3.0f, 2.0f, 0.0f));
+	model = glm::translate(model, glm::vec3(-3.0f, 0.7f, 0.0f));
 	model = glm::rotate(model, -90.0f * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 	shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 	BlackHawk.RenderModel();
 
-	model = glm::mat4(1.0f);
+	/*model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(-7.0f, 0.0f, 10.0f));
 	model = glm::scale(model, glm::vec3(0.006f, 0.006f, 0.006f));
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 	dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-	xWing.RenderModel();
+	xWing.RenderModel();*/
 
 }
 
@@ -221,6 +220,14 @@ void OmniShadowMapPass(PointLight* light)
 
 void RenderPass(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
 {
+
+	glViewport(0, 0, 1280, 720);
+
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	skybox.DrawSkyBox(viewMatrix, projectionMatrix);
+	
 	shaderList[0].UseShader();
 
 	uniformModel = shaderList[0].GetModelLocation();
@@ -231,10 +238,7 @@ void RenderPass(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
 	uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 	uniformShininess = shaderList[0].GetShininessLocation();
 
-	glViewport(0, 0, 1280, 720);
-
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 
 
 	glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
@@ -263,13 +267,11 @@ void RenderPass(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
 int main()
 {
 	
-	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 3.0f, 0.5f);
+	camera = Camera(glm::vec3(-2.0f, 3.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 3.0f, 0.5f);
 	CreateObjects();
 	CreateShaders();
 	
-	//rockTexture.LoadTexture();
-	fabricTexture.LoadTextureA();
-	brickTexture.LoadTextureA();
+	sandstone.LoadTexture();
 	ground.LoadTextureA();
 
 	shinyMaterial = Material(1.0f, 32);
@@ -280,9 +282,6 @@ int main()
 
 	BlackHawk = Model();
 	BlackHawk.LoadModel("Models/uh60.obj");
-
-	xWing = Model();
-	xWing.LoadModel("Models/x-wing.obj");
 	
 	float directionalLightRedValue = 1, directionalLightGreenValue = 1, directionalLightBlueValue = 1,
 	directionalLightIntensity = 0.5f, directionalLightDiffuseIntensity = 0.3f,
@@ -292,10 +291,10 @@ int main()
 		0.5, 0.3,
 		0.0f, -7.0f, -1.0f);
 	
-	pointLights[0] = PointLight(1024, 1024, 0.01f, 100.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, -4.0f, 3.0f, 0.0f, 0.3f, 0.1f, 0.1f);
+	/*pointLights[0] = PointLight(1024, 1024, 0.01f, 100.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, -4.0f, 3.0f, 0.0f, 0.3f, 0.1f, 0.1f);
 	pointLightCount++;
 	pointLights[1] = PointLight(1024, 1024, 0.01f, 100.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 2.0f, 0.0f, 0.3f, 0.1f, 0.1f);
-	pointLightCount++;
+	pointLightCount++;*/
 
 	
 	spotLights[0] = SpotLight(1024, 1024, 0.01f, 100.0f, 1.0f, 1.0f, 1.0f,
@@ -306,7 +305,15 @@ int main()
 		20.0f);
 	spotLightCount++;
 	
-	
+	std::vector<std::string> skyboxFaces;
+	skyboxFaces.push_back("Textures/Skybox/nightsky_rt.tga");
+	skyboxFaces.push_back("Textures/Skybox/nightsky_lf.tga");
+	skyboxFaces.push_back("Textures/Skybox/nightsky_up.tga");
+	skyboxFaces.push_back("Textures/Skybox/nightsky_dn.tga");
+	skyboxFaces.push_back("Textures/Skybox/nightsky_bk.tga");
+	skyboxFaces.push_back("Textures/Skybox/nightsky_ft.tga");
+
+	skybox = SkyBox(skyboxFaces);
 
 	glm::mat4 projection = glm::mat4(1.0f);
 	

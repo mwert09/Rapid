@@ -2,7 +2,7 @@
 
 #include <GL/glew.h>
 #include <stdio.h>
-#include "stb_image.h"
+#include "CommonValues.h"
 
 namespace Rapid
 {
